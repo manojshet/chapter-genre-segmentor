@@ -3,11 +3,18 @@ import argparse
 import configparser
 import os.path
 import json
-# import spacy
+import spacy
+import multiprocessing
+from functools import partial
 
-def preProcessPlot(dataset):
-
-    return
+def lemmatizeData(sp, dataset):
+    for i, row in dataset.iterrows():
+        token_list = list()
+        sentences = sp(row['Plot_summary'])
+        token_list = [word.lemma_ for word in sentences]
+        row['Plot_summary'] = token_list
+        print("done"+str(i))
+    return dataset
 
 def correctGenresInDataset(dataset):
     for i, row in dataset.iterrows():
@@ -37,7 +44,20 @@ if __name__ == '__main__':
     df = readTxtFile(train_data_loc)
     df = correctGenresInDataset(df)
 
+
+    # sp = spacy.load('en_core_web_sm')
+
+    # func =partial(lemmatizeData, sp)
+
+    # pool =multiprocessing.Pool(processes=4)
+    # df = pool.map(func, df )
+    # df = lemmatizeData(sp, df)
+    # pool.close()
+    # pool.join()
+
     log_file =config.get('01_load_and_preprocess', 'pre_processed_dataset_loc')
     df.to_csv(log_file, index=False)
     print('Saved results to log file!')
+
+
 
