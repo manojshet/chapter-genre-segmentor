@@ -3,11 +3,16 @@ Classification of chapters of a book into genre's
 
 Project built on python 3.8
 
-Run requirement.txt to install packages
-
+Install Spacy
 ```buildoutcfg
-pip install -r requirement.txt
+pip install spacy
+
 ```
+Install language model for spacy
+```buildoutcfg
+python -m spacy download en_core_web_sm 
+```
+
 
 **Procedure to run _"01_load_and_preprocess.py"_ in Preprocessing directory**
 ```buildoutcfg
