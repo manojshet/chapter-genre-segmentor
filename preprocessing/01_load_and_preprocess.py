@@ -20,6 +20,15 @@ def correctGenresInDataset(dataset):
         row['Genres'] = list(json.loads(row['Genres']).values())
     return dataset
 
+def splitGenres(dataset):
+    dict = {'Genres': [], 'Plot_summary': []}
+    new_df = pd.DataFrame(dict)
+    for i, row in dataset.iterrows():
+        for genre in row['Genres']:
+            temp_dict = {'Genres':genre, 'Plot_summary': row['Plot_summary']}
+            new_df = new_df.append(temp_dict, ignore_index=True)
+    return new_df
+
 def readTxtFile(fileName):
     dataframe = pd.read_csv(fileName,error_bad_lines=False)
     dataframe = dataframe[dataframe['Genres'].notna()]
@@ -49,8 +58,10 @@ if __name__ == '__main__':
     #
     # df['Plot_summary'] = preprocess_pipe(df['Plot_summary'], nlp)
 
+    df2 = splitGenres(df)
+
     log_file =config.get('01_load_and_preprocess', 'pre_processed_dataset_loc')
-    df.to_csv(log_file, index=False)
+    df2.to_csv(log_file, index=False)
     print('Saved results to log file!')
 
 
